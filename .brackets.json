@@ -1,0 +1,6 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/Users/Austin/Documents/Ionic/cagol-app/plugins/org.apache.cordova.camera/www/CameraConstants.js",
+        "C:/Users/Austin/Documents/Ionic/cagol-app/www/js/controllers.js"
+    ]
+}

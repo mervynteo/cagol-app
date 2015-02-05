@@ -1,0 +1,17 @@
+<ion-view view-title="Home" data-ng-if='!hasAuthorisation'>
+  <ion-content>
+    <a class='cagol-facebook-button button' data-ng-click='facebookLogin()'>
+      <i class='cagol-facebook-button-icon icon ion-social-facebook'></i>
+      <span class='cagol-facebook-button-text'>Sign in with Facebook</span>
+    </a>
+  </ion-content>
+</ion-view>
+
+<ion-view view-title="Home" data-ng-if='hasAuthorisation'>
+  <ion-content>
+    <button class="button button-positive">
+      <i class='icon ion-plus-round'></i>
+      Add Bin
+    </button>
+  </ion-content>
+</ion-view>
