@@ -9,7 +9,10 @@
 
 <ion-view view-title="Home" data-ng-if='hasAuthorisation'>
   <ion-content>
-    <button class="button button-positive">
+    <ui-gmap-google-map center='map.center' zoom='18'></ui-gmap-google-map>
+    
+    <button class="button button-positive cagol-button"
+            data-ng-click='addBin()'>
       <i class='icon ion-plus-round'></i>
       Add Bin
     </button>

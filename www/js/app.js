@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('cagol', ['ionic', 'ngCordova', 'cagol.controllers', 'cagol.services', 'cagol.config'])
+angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.controllers', 'cagol.services', 'cagol.config'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -24,7 +24,8 @@ angular.module('cagol', ['ionic', 'ngCordova', 'cagol.controllers', 'cagol.servi
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider, 
+                  cagolConfigProvider) {
   $stateProvider
 
   .state('app', {
@@ -88,8 +89,10 @@ angular.module('cagol', ['ionic', 'ngCordova', 'cagol.controllers', 'cagol.servi
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
-})
-
-.run(function () {
   
+  uiGmapGoogleMapApiProvider.configure({
+    key: cagolConfigProvider.getGoogleMapsKey(),
+    v: '3.17',
+    libraries: 'weather, geometry, visualization'
+  });
 });

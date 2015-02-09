@@ -1,3 +1,15 @@
+.angular-google-map-container { 
+  height: 200px; 
+}
+
+.cagol-button {
+  box-sizing: border-box;
+  font-size: 20px;
+  margin: 10px 2.5% 10px 2.5%;
+  padding: 10px 0 10px 0;
+  width: 95%;
+}
+
 .cagol-facebook-button {
   background-color: #3b5998;
   box-sizing: border-box;

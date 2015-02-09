@@ -16,6 +16,7 @@
   },
   "cordovaPlugins": [
     "org.apache.cordova.camera",
-    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git"
+    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git",
+    "org.apache.cordova.geolocation"
   ]
 }
