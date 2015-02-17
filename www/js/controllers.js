@@ -2,11 +2,11 @@ angular.module('cagol.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $cordovaGeolocation,
                                  uiGmapGoogleMapApi, UserService, FacebookService,
-                                CagolService, $cordovaCamera) {  
+                                CagolService, $cordovaCamera) {
   $scope.accessTokenTest = function () {
     alert(UserService.getAccessToken());
   };
-  
+
   $scope.hasAuthorisation = UserService.hasAuthorisation();
 
   if ($scope.hasAuthorisation) {
@@ -33,7 +33,7 @@ angular.module('cagol.controllers', [])
         });
       }
     );
-    
+
     $scope.addBin = function () {
       var options = {
         quality: 50,
@@ -55,7 +55,7 @@ angular.module('cagol.controllers', [])
           },
           image: imageData
         };
-        
+
         CagolService.addBin(bin, UserService.getAccessToken(), function (err, res) {
           console.log("Bin added... Hopefully.")
         });
@@ -65,29 +65,39 @@ angular.module('cagol.controllers', [])
 
     };
   };
-  
-  if (UserService.getAccessToken()) {
-    FacebookService.getProfilePicture(UserService.getAccessToken(), function (res) {
+
+  var accessToken = UserService.getAccessToken();
+  if (accessToken) {
+    FacebookService.getProfilePicture(accessToken, function (res) {
       $scope.profilePictureUrl = res;
     });
+
+    FacebookService.getMe(accessToken, function (err, res) {
+      $scope.fullName = res.name;
+      $scope.firstName = res.first_name;
+      $scope.lastName = res.last_name;
+    });
   };
-  
-  
+
+
 })
 
-.controller('LoginCtrl', function ($scope, $ionicPlatform, $cordovaOauth, UserService, ConfigService, $window) {
+.controller('LoginCtrl', function ($scope, $ionicPlatform, $cordovaOauth,
+  UserService, ConfigService, $window, FacebookService) {
   $scope.hasAuthorisation = UserService.hasAuthorisation();
-  
-  if (UserService.hasAuthorisation()) {  
+
+  if (UserService.hasAuthorisation()) {
   }
   else {
     $scope.facebookLogin = function() {
       $cordovaOauth.facebook(ConfigService._FACEBOOK_CLIENT_ID, ["email"]).then(function(result) {
         UserService.setAccessToken(result.access_token);
         UserService.setExpiresIn(result.expires_in);
-        
-        console.log(result.access_token);
-        
+
+        // result.access_token doesn't work with services at this point,
+        // why is that?
+        console.dir(result);
+
         $window.location.reload(true);
       }, function(error) {
           // error
@@ -101,4 +111,3 @@ angular.module('cagol.controllers', [])
     UserService.clear();
   };
 });
-

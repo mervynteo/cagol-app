@@ -19,7 +19,7 @@
     <ion-content>
       <div class='cagol-menu-profile' data-ng-if='hasAuthorisation'>
         <img class='cagol-menu-profile-image' src='{{ profilePictureUrl }}' />
-        <p>Austin Davies</p>
+        <p data-ng-bind='fullName'></p>
       </div>
       <ion-list data-ng-if='!hasAuthorisation'>
         <ion-item nav-clear menu-close href="#/app/login">
