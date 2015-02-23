@@ -1,5 +1,20 @@
-.angular-google-map-container { 
-  height: 200px; 
+.angular-google-map-container {
+  height: 200px;
+}
+
+.cagol-bin-image {
+  box-sizing: border-box;
+  display: inline-block;
+  height: 200px;
+  width: 125px;
+}
+
+.cagol-bin-map-container {
+  display: inline-block;
+  height: 125px;
+  left: 125px;
+  position: absolute;
+  width: 100%;
 }
 
 .cagol-button {

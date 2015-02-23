@@ -2,12 +2,13 @@ angular.module('cagol.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $cordovaGeolocation,
                                  uiGmapGoogleMapApi, UserService, FacebookService,
-                                CagolService, $cordovaCamera) {
+                                CagolService, $cordovaCamera, $location) {
   $scope.accessTokenTest = function () {
     alert(UserService.getAccessToken());
   };
 
   $scope.hasAuthorisation = UserService.hasAuthorisation();
+  var accessToken = UserService.getAccessToken();
 
   if ($scope.hasAuthorisation) {
     var watchOptions = {
@@ -30,6 +31,23 @@ angular.module('cagol.controllers', [])
 
         uiGmapGoogleMapApi.then(function(maps) {
           $scope.map = { center: { latitude: $scope.lat, longitude: $scope.long } };
+
+          CagolService.getClosestBin({
+            'latitude': $scope.lat,
+            'longitude': $scope.long },
+            accessToken,
+            function (err, res) {
+              $scope.closestBin = {
+                id: res._id,
+                position: res.position,
+                options: {
+                  clickable: true
+                },
+                click: function (marker, eventName, args) {
+                  $location.path('/app/bin/' + res._id);
+                }
+              };
+            });
         });
       }
     );
@@ -66,7 +84,6 @@ angular.module('cagol.controllers', [])
     };
   };
 
-  var accessToken = UserService.getAccessToken();
   if (accessToken) {
     FacebookService.getProfilePicture(accessToken, function (res) {
       $scope.profilePictureUrl = res;
@@ -78,8 +95,13 @@ angular.module('cagol.controllers', [])
       $scope.lastName = res.last_name;
     });
   };
+})
 
+.controller('BinCtrl', function ($scope, $ionicPlatform, $stateParams,
+CagolService, UserService) {
+  $scope.binId = $stateParams.id;
 
+  $scope.bin = JSON.parse(localStorage.getItem('CAGOL:closest_bin'));
 })
 
 .controller('LoginCtrl', function ($scope, $ionicPlatform, $cordovaOauth,

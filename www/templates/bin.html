@@ -1,0 +1,21 @@
+<ion-view view-title="Bin">
+  <ion-content>
+    <img class='cagol-bin-image' src='https://cagol-api.herokuapp.com/v1/bins/{{ binId }}/image' />
+
+    <div class='cagol-bin-map-container'>
+      <ui-gmap-google-map center='map.center' zoom='18'>
+        <ui-gmap-marker
+          idKey='bin._id'
+          coords='bin.position'
+          >
+        </ui-gmap-marker>
+      </ui-gmap-google-map>
+    </div>
+
+    <button class="button button-positive cagol-button"
+            data-ng-click='depositRubbish()'>
+      <i class='icon ion-trash-b'></i>
+      Make Deposit
+    </button>
+  </ion-content>
+</ion-view>

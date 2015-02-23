@@ -24,6 +24,59 @@ angular.module('cagol.services', [])
       console.log("failure");
     });
   };
+
+  this.getBinById = function (id, accessToken, callback) {
+    $http({
+      url: _CAGOL_URL + '/bins/' + id,
+      method: "GET",
+      headers: {
+        'Authorization': 'Facebook ' + accessToken +
+        ' ' + ConfigService.getAppHash(accessToken)
+        + ' ' + new Date().getTime()
+      }
+    }).success(function (data, status, headers, config) {
+      callback(null, data);
+    }).error(function (data, status, headers, config) {
+      console.log("failure");
+    });
+  };
+
+  this.getBinImage = function (id, accessToken, callback) {
+    $http({
+      url: _CAGOL_URL + '/bins/' + id + '/image',
+      method: "GET",
+      headers: {
+        'Authorization': 'Facebook ' + accessToken +
+        ' ' + ConfigService.getAppHash(accessToken)
+        + ' ' + new Date().getTime()
+      }
+    }).success(function (data, status, headers, config) {
+      callback(null, data);
+    }).error(function (data, status, headers, config) {
+      console.log("failure");
+    });
+  };
+
+  this.getClosestBin = function (position, accessToken, callback) {
+    $http({
+      url: _CAGOL_URL + '/bins/' + position.latitude + '/' +
+      position.longitude,
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Facebook ' + accessToken +
+        ' ' + ConfigService.getAppHash(accessToken)
+        + ' ' + new Date().getTime()
+      }
+    }).success(function (data, status, headers, config) {
+      localStorage.removeItem('CAGOL:closest_bin');
+      localStorage.setItem('CAGOL:closest_bin', JSON.stringify(data));
+
+      callback(null, data);
+    }).error(function (data, status, headers, config) {
+      console.log("failure");
+    });
+  };
 })
 
 .service('FacebookService', function ($http) {

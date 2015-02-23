@@ -7,10 +7,38 @@
   </ion-content>
 </ion-view>
 
-<ion-view view-title="Home" data-ng-if='hasAuthorisation'>
+<ion-view view-title="Home" data-ng-if='hasAuthorisation && !selectedClosestBin'>
   <ion-content>
-    <ui-gmap-google-map center='map.center' zoom='18'></ui-gmap-google-map>
-    
+    <ui-gmap-google-map center='map.center' zoom='18' data-tap-disabled='true'>
+      <ui-gmap-marker
+        idKey='closestBin.id'
+        options='closestBin.options'
+        coords='closestBin.position'
+        click="closestBin.click"
+        >
+      </ui-gmap-marker>
+    </ui-gmap-google-map>
+
+    <button class="button button-positive cagol-button"
+            data-ng-click='addBin()'>
+      <i class='icon ion-plus-round'></i>
+      Add Bin
+    </button>
+  </ion-content>
+</ion-view>
+
+<ion-view view-title="Home" data-ng-if='hasAuthorisation && selectedClosestBin'>
+  <ion-content>
+    <ui-gmap-google-map center='map.center' zoom='18' data-tap-disabled='true'>
+      <ui-gmap-marker
+        idKey='closestBin.id'
+        options='closestBin.options'
+        coords='closestBin.position'
+        click="closestBin.click"
+        >
+      </ui-gmap-marker>
+    </ui-gmap-google-map>
+
     <button class="button button-positive cagol-button"
             data-ng-click='addBin()'>
       <i class='icon ion-plus-round'></i>

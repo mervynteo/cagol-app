@@ -9,7 +9,7 @@ angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.contr
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs).
-    // The reason we default this to hidden is that native apps don't usually show an accessory bar, at 
+    // The reason we default this to hidden is that native apps don't usually show an accessory bar, at
     // least on iOS. It's a dead giveaway that an app is using a Web View. However, it's sometimes
     // useful especially with forms, though we would prefer giving the user a little more room
     // to interact with the app.
@@ -24,7 +24,7 @@ angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.contr
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider, 
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider,
                   cagolConfigProvider) {
   $stateProvider
 
@@ -34,7 +34,17 @@ angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.contr
     templateUrl: "templates/menu.html",
     controller: 'AppCtrl'
   })
-  
+
+  .state('app.bin', {
+    url: "/bin/:id",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/bin.html",
+        controller: 'BinCtrl'
+      }
+    }
+  })
+
   .state('app.login', {
     url: "/login",
     views: {
@@ -89,7 +99,7 @@ angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.contr
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
-  
+
   uiGmapGoogleMapApiProvider.configure({
     key: cagolConfigProvider.getGoogleMapsKey(),
     v: '3.17',
