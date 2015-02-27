@@ -7,14 +7,14 @@
   </ion-content>
 </ion-view>
 
-<ion-view view-title="Home" data-ng-if='hasAuthorisation && !selectedClosestBin'>
+<ion-view view-title="Home" data-ng-show='hasAuthorisation && !selectedClosestBin'>
   <ion-content>
-    <ui-gmap-google-map center='map.center' zoom='18' data-tap-disabled='true'>
-      <ui-gmap-marker
-        idKey='closestBin.id'
-        options='closestBin.options'
-        coords='closestBin.position'
-        click="closestBin.click"
+    <ui-gmap-google-map id='globalMap' center='map.center' zoom='18' data-tap-disabled='true'>
+      <ui-gmap-marker data-ng-repeat='marker in markers'
+        idKey='marker.id'
+        options='marker.options'
+        coords='marker.position'
+        click='marker.click'
         >
       </ui-gmap-marker>
     </ui-gmap-google-map>
@@ -29,20 +29,28 @@
 
 <ion-view view-title="Home" data-ng-if='hasAuthorisation && selectedClosestBin'>
   <ion-content>
-    <ui-gmap-google-map center='map.center' zoom='18' data-tap-disabled='true'>
-      <ui-gmap-marker
-        idKey='closestBin.id'
-        options='closestBin.options'
-        coords='closestBin.position'
-        click="closestBin.click"
-        >
-      </ui-gmap-marker>
-    </ui-gmap-google-map>
+    <img class='cagol-bin-image' src='https://cagol-api.herokuapp.com/v1/bins/{{ selectedBin._id }}/image' />
+
+    <div class='cagol-bin-map-container'>
+      <ui-gmap-google-map center='map.center' zoom='18'>
+        <ui-gmap-marker
+          idKey='selectedBin._id'
+          coords='selectedBin.position'
+          >
+        </ui-gmap-marker>
+      </ui-gmap-google-map>
+    </div>
 
     <button class="button button-positive cagol-button"
-            data-ng-click='addBin()'>
-      <i class='icon ion-plus-round'></i>
-      Add Bin
+            data-ng-click='depositRubbish()'>
+      <i class='icon ion-trash-b'></i>
+      Make Deposit
+    </button>
+
+    <button class="button button-light cagol-button"
+            data-ng-click='init()'>
+      <i class='icon ion-arrow-left-a'></i>
+      Go Back
     </button>
   </ion-content>
 </ion-view>

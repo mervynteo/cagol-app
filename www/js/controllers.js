@@ -1,14 +1,23 @@
 angular.module('cagol.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $cordovaGeolocation,
-                                 uiGmapGoogleMapApi, UserService, FacebookService,
-                                CagolService, $cordovaCamera, $location) {
-  $scope.accessTokenTest = function () {
-    alert(UserService.getAccessToken());
-  };
+uiGmapGoogleMapApi, UserService, FacebookService,
+CagolService, $cordovaCamera, $location) {
 
   $scope.hasAuthorisation = UserService.hasAuthorisation();
   var accessToken = UserService.getAccessToken();
+
+  if (accessToken) {
+    FacebookService.getProfilePicture(accessToken, function (res) {
+      $scope.profilePictureUrl = res;
+    });
+
+    FacebookService.getMe(accessToken, function (err, res) {
+      $scope.fullName = res.name;
+      $scope.firstName = res.first_name;
+      $scope.lastName = res.last_name;
+    });
+  };
 
   if ($scope.hasAuthorisation) {
     var watchOptions = {
@@ -16,6 +25,8 @@ angular.module('cagol.controllers', [])
       timeout : 3000,
       enableHighAccuracy: false // may cause errors if true
     };
+
+    $scope.geolocationWatchCount = 0;
 
     var watch = $cordovaGeolocation.watchPosition(watchOptions);
     watch.then(
@@ -27,27 +38,18 @@ angular.module('cagol.controllers', [])
         $scope.lat  = position.coords.latitude
         $scope.long = position.coords.longitude
 
-        //console.dir(position);
+        console.log("got position");
 
         uiGmapGoogleMapApi.then(function(maps) {
           $scope.map = { center: { latitude: $scope.lat, longitude: $scope.long } };
 
-          CagolService.getClosestBin({
-            'latitude': $scope.lat,
-            'longitude': $scope.long },
-            accessToken,
-            function (err, res) {
-              $scope.closestBin = {
-                id: res._id,
-                position: res.position,
-                options: {
-                  clickable: true
-                },
-                click: function (marker, eventName, args) {
-                  $location.path('/app/bin/' + res._id);
-                }
-              };
-            });
+          if ($scope.geolocationWatchCount % 5 === 0 ||
+          $scope.geolocationWatchCount === 0) {
+            console.log("GET");
+            $scope.getClosestBins(3);
+          };
+
+          $scope.geolocationWatchCount++;
         });
       }
     );
@@ -84,17 +86,37 @@ angular.module('cagol.controllers', [])
     };
   };
 
-  if (accessToken) {
-    FacebookService.getProfilePicture(accessToken, function (res) {
-      $scope.profilePictureUrl = res;
-    });
-
-    FacebookService.getMe(accessToken, function (err, res) {
-      $scope.fullName = res.name;
-      $scope.firstName = res.first_name;
-      $scope.lastName = res.last_name;
-    });
+  $scope.init = function () {
+    $scope.selectedClosestBin = false;
+    $scope.selectedBin = null;
   };
+
+  $scope.markers = [];
+
+  $scope.getClosestBins = function (count) {
+    CagolService.getClosestBins({
+      'latitude': $scope.lat,
+      'longitude': $scope.long },
+      accessToken,
+      count,
+      function (err, bins) {
+        bins.forEach(function (bin) {
+          $scope.markers.push({
+            id: bin._id,
+            position: bin.position,
+            options: {
+              clickable: true
+            },
+            click: function () {
+              $scope.selectedClosestBin = true;
+              $scope.selectedBin = bin;
+            }
+          });
+        });
+      });
+  };
+
+  $scope.init();
 })
 
 .controller('BinCtrl', function ($scope, $ionicPlatform, $stateParams,

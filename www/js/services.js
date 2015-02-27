@@ -57,10 +57,12 @@ angular.module('cagol.services', [])
     });
   };
 
-  this.getClosestBin = function (position, accessToken, callback) {
+  this.getClosestBins = function (position, accessToken, count, callback) {
+    console.dir(position);
+
     $http({
       url: _CAGOL_URL + '/bins/' + position.latitude + '/' +
-      position.longitude,
+      position.longitude + '?count=' + count,
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
