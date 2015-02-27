@@ -2,7 +2,7 @@ angular.module('cagol.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $cordovaGeolocation,
 uiGmapGoogleMapApi, UserService, FacebookService,
-CagolService, $cordovaCamera, $location) {
+CagolService, $cordovaCamera, $location, CameraService) {
 
   $scope.hasAuthorisation = UserService.hasAuthorisation();
   var accessToken = UserService.getAccessToken();
@@ -20,6 +20,10 @@ CagolService, $cordovaCamera, $location) {
   };
 
   if ($scope.hasAuthorisation) {
+    CagolService.getDepositTypes(accessToken, function (err, depositTypes) {
+      $scope.depositTypes = depositTypes;
+    });
+
     var watchOptions = {
       frequency : 1000,
       timeout : 3000,
@@ -38,6 +42,11 @@ CagolService, $cordovaCamera, $location) {
         $scope.lat  = position.coords.latitude
         $scope.long = position.coords.longitude
 
+        $scope.userPosition = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+
         console.log("got position");
 
         uiGmapGoogleMapApi.then(function(maps) {
@@ -55,7 +64,7 @@ CagolService, $cordovaCamera, $location) {
     );
 
     $scope.addBin = function () {
-      var options = {
+      var _OPTIONS = {
         quality: 50,
         destinationType: Camera.DestinationType.DATA_URL,
         sourceType: Camera.PictureSourceType.CAMERA,
@@ -67,7 +76,7 @@ CagolService, $cordovaCamera, $location) {
         saveToPhotoAlbum: false
       };
 
-      $cordovaCamera.getPicture(options).then(function (imageData) {
+      $cordovaCamera.getPicture(_OPTIONS).then(function (imageData) {
         var bin = {
           position: {
             latitude: $scope.lat,
@@ -82,7 +91,6 @@ CagolService, $cordovaCamera, $location) {
       }, function(err) {
         // error
       });
-
     };
   };
 
@@ -114,6 +122,49 @@ CagolService, $cordovaCamera, $location) {
           });
         });
       });
+  };
+
+  $scope.makeDeposit = function () {
+    var canMakeDeposit = CagolService.canMakeDeposit($scope.userPosition,
+    $scope.selectedBin.position);
+
+    if (!canMakeDeposit) {
+      alert("Please get closer to the bin.");
+    }
+    else if (!$scope.selectedBin.depositType) {
+      alert("Please select a deposit type.")
+    }
+    else {
+      var _OPTIONS = {
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        allowEdit: true,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 280,
+        targetHeight: 280,
+        popoverOptions: CameraPopoverOptions,
+        saveToPhotoAlbum: false
+      };
+
+      $cordovaCamera.getPicture(_OPTIONS).then(function (imageData) {
+        var deposit = {
+          position: {
+            latitude: $scope.lat,
+            longitude: $scope.long
+          },
+          image: imageData,
+          deposit_type_id: $scope.selectedBin.depositType._id,
+          bin_id: $scope.selectedBin._id
+        };
+
+        CagolService.addDeposit(deposit, UserService.getAccessToken(), function (err, res) {
+          console.log("Deposit type added... Hopefully.")
+        });
+      }, function(err) {
+        // error
+      });
+    }
   };
 
   $scope.init();

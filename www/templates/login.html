@@ -41,8 +41,20 @@
       </ui-gmap-google-map>
     </div>
 
-    <button class="button button-positive cagol-button"
-            data-ng-click='depositRubbish()'>
+    <div class="cagol-deposit-types list">
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Deposit Type
+        </div>
+        <select data-ng-options='depositType as depositType.name for depositType in depositTypes'
+        data-ng-model='selectedBin.depositType'>
+
+        </select>
+      </label>
+    </div>
+
+    <button class="button button-positive cagol-button cagol-make-deposit-button"
+            data-ng-click='makeDeposit()'>
       <i class='icon ion-trash-b'></i>
       Make Deposit
     </button>

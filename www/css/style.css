@@ -25,6 +25,13 @@
   width: 95%;
 }
 
+.cagol-deposit-types {
+  left: 10px;
+  position:absolute;
+  top: 210px;
+  right: 10px;
+}
+
 .cagol-facebook-button {
   background-color: #3b5998;
   box-sizing: border-box;
@@ -42,6 +49,10 @@
 .cagol-facebook-button-text {
   padding: 5px 0 0 0;
   vertical-align: bottom;
+}
+
+.cagol-make-deposit-button {
+  margin-top: 70px;
 }
 
 .cagol-menu-profile {
