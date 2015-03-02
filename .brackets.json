@@ -1,6 +1,7 @@
 {
     "jscodehints.detectedExclusions": [
         "C:/Users/Austin/Documents/Ionic/cagol-app/plugins/org.apache.cordova.camera/www/CameraConstants.js",
-        "C:/Users/Austin/Documents/Ionic/cagol-app/www/js/controllers.js"
+        "C:/Users/Austin/Documents/Ionic/cagol-app/www/js/controllers.js",
+        "D:/Users/Austin/Documents/GitHub/cagol-app/www/lib/angular-google-maps/src/js/wrapped/uuid.core.js"
     ]
 }

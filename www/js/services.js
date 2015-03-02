@@ -144,8 +144,19 @@ angular.module('cagol.services', [])
     });
   };
 
-  this.makeDeposit = function () {
-
+  this.getStatistics = function (accessToken, callback) {
+    console.log(accessToken);
+    $http({
+      url: _CAGOL_URL + '/me/score',
+      method: "GET",
+      headers: {
+        'Authorization': AuthorizationService.getHeader(accessToken)
+      }
+    }).success(function (data, status, headers, config) {
+      callback(null, data);
+    }).error(function (data, status, headers, config) {
+      console.log("failure");
+    });
   };
 })
 

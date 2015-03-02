@@ -25,6 +25,10 @@
   width: 95%;
 }
 
+.cagol-content-padding {
+  padding: 10px;
+}
+
 .cagol-deposit-types {
   left: 10px;
   position:absolute;

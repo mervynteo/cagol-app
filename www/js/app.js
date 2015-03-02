@@ -69,6 +69,25 @@ angular.module('cagol', ['ionic', 'ngCordova', 'uiGmapgoogle-maps', 'cagol.contr
       }
     }
   })
+  
+  .state('app.statistics', {
+    url: "/statistics",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/statistics.html",
+        controller: 'StatisticsCtrl'
+      }
+    },
+    onEnter: function (CagolService, $rootScope, UserService) {
+      $rootScope.statistics = {
+        score: 0
+      };
+      
+      CagolService.getStatistics(UserService.getAccessToken(), function (err, statistics) {
+        $rootScope.statistics.score = statistics.score;
+      });
+    }
+  })
 
   .state('app.browse', {
     url: "/browse",

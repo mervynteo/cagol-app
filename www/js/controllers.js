@@ -205,4 +205,8 @@ CagolService, UserService) {
   $scope.signOut = function () {
     UserService.clear();
   };
+})
+
+.controller('StatisticsCtrl', function ($scope, $ionicPlatform, UserService, CagolService) {
+  // statistics object is populated by app.js
 });
